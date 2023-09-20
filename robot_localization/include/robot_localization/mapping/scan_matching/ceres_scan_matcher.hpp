@@ -8,7 +8,6 @@ namespace robot_localization{
 namespace mapping{
 namespace scan_matching{
 enum LossFunc{null_func=0, cauchy=1, huber=2};
-
 struct CeresScanMatcherOptions{
     LossFunc loss = null_func;
     double linear_search_window = 0.1;
@@ -38,14 +37,7 @@ std::shared_ptr<CeresScanMatcherOptions> options_;
 ceres::Solver::Options* ceres_options_;
 ceres::Solver::Summary* sum_{nullptr};
 };
-ceres::CostFunction* createOccupiedSpaceCostFunction2D(
-    const double scaling_factor, const sensor::PointCloud& point_cloud,
-    const grid::ProbabilityGrid& grid);
 }
-ceres::CostFunction* translationDeltaCostFunctor2D(const double scaling_factor,
-    double target_x, double target_y);
-ceres::CostFunction* rotationDeltaCostFunctor2D(const double scaling_factor,
-    double target_theta);
 }
 }
 #endif

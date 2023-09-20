@@ -34,6 +34,9 @@ void ProbabilityGrid::setProbability(Eigen::Vector2i pose_i, float probability){
         int index = MAP_INDEX(map_meta_, pose_i[0], pose_i[1]);
         probability = utils::clamp(probability, 0.1f, 0.9f);
         probability_data_[index] = probability;
+        if(probability > 0.8) current_data_[index] = 100;
+        else if (probability < 0.2) current_data_[index] = 0;
+        else if(current_data_[index] == -1) current_data_[index] = 0;
     }
 }
 void ProbabilityGrid::reset(OccupancyGrid* ros_map){
@@ -74,5 +77,8 @@ void ProbabilityGrid::updateMapMetaToProbability(){
             probability_data_.push_back(0.1);
         }
     }
+}
+nav_msgs::msg::MapMetaData ProbabilityGrid::getMapMeta(){
+    return *map_meta_.get();
 }
 }}}

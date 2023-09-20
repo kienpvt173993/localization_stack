@@ -6,6 +6,7 @@ set(TEST_NAMES
     fast_scan_matcher
     realtime_scan_matcher
     point_cloud_insertor
+    transform
 )
 
 foreach(name IN LISTS TEST_NAMES)

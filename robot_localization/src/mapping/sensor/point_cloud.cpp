@@ -29,7 +29,21 @@ void PointCloud::convertLaserScanToPointCloud(LaserScan* scan,
             else
                 pushBack(x, y, 0.);
         }
+        else if(scan->ranges[i] > max_range){
+            double angle = min + incr*i;
+            Point32 point;
+            point.x = max_range*cos(angle);
+            point.y = max_range*sin(angle);
+            missing_point.push_back(point);
+        }
     }
+}
+void PointCloud::clear(){
+    this->points.clear();
+    this->intensities.clear();
+}
+bool PointCloud::empty(){
+    return this->intensities.empty();
 }
 void PointCloud::pushBack(double x, double y, float intensity){
     geometry_msgs::msg::Point32 point;

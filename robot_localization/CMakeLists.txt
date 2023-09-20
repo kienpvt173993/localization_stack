@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.8)
 project(robot_localization)
 
-include_directories(include)
-
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
@@ -23,7 +21,7 @@ set(dependencies
 foreach(name IN LISTS dependencies)
   find_package(${name} REQUIRED)
 endforeach()
-
+include_directories(include)
 add_library(${library_name} SHARED
   src/mapping/grid/probability_grid.cpp
   src/mapping/sensor/point_cloud.cpp

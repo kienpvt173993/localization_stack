@@ -30,6 +30,7 @@ void reset(nav_msgs::msg::OccupancyGrid* ros_map);
 
 nav_msgs::msg::OccupancyGrid getRawMap();
 nav_msgs::msg::OccupancyGrid getCurrentMap();
+nav_msgs::msg::MapMetaData getMapMeta();
 
 protected:
 void updateMapMetaToProbability();

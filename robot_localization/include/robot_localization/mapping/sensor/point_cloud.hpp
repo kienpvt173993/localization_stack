@@ -13,8 +13,11 @@ explicit PointCloud(sensor_msgs::msg::LaserScan* scan,
 PointCloud();
 ~PointCloud();
 size_t size();
+void clear();
+bool empty();
 std::vector<float> intensities;
 void pushBack(double x, double y, float intensity);
+std::vector<geometry_msgs::msg::Point32> missing_point;
 protected:
 void convertLaserScanToPointCloud(
     sensor_msgs::msg::LaserScan* scan,

@@ -1,4 +1,7 @@
 #include "robot_localization/mapping/scan_matching/ceres_scan_matcher.hpp"
+#include "robot_localization/mapping/scan_matching/ceres_cost_functor/occupied_space_cost.hpp"
+#include "robot_localization/mapping/scan_matching/ceres_cost_functor/translation_delta_cost.hpp"
+#include "robot_localization/mapping/scan_matching/ceres_cost_functor/rotation_delta_cost.hpp"
 namespace robot_localization{
 namespace mapping{
 namespace scan_matching{

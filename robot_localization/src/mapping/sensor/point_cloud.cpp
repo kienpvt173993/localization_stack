@@ -11,7 +11,7 @@ PointCloud::PointCloud(LaserScan* scan, double max_range, double min_range){
 }
 PointCloud::PointCloud(){}
 PointCloud::~PointCloud(){}
-size_t PointCloud::size(){
+size_t PointCloud::size() const{
     return this->intensities.size();
 }
 void PointCloud::convertLaserScanToPointCloud(LaserScan* scan,
@@ -42,7 +42,7 @@ void PointCloud::clear(){
     this->points.clear();
     this->intensities.clear();
 }
-bool PointCloud::empty(){
+bool PointCloud::empty() const{
     return this->intensities.empty();
 }
 void PointCloud::pushBack(double x, double y, float intensity){

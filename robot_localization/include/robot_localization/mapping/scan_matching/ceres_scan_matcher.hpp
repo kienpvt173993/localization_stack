@@ -24,7 +24,7 @@ explicit CeresScanMatcher(CeresScanMatcherOptions* opitons);
 
 void match(const geometry_msgs::msg::Pose2D target_translation,
             const geometry_msgs::msg::Pose2D initial_pose_estimate,
-            const sensor::PointCloud& point_cloud, const grid::ProbabilityGrid& grid,
+            const sensor::PointCloud& point_cloud,const grid::ProbabilityGrid& grid,
             geometry_msgs::msg::Pose2D* pose_estimate) const;
 
 void setMatcherOptions(CeresScanMatcherOptions* opitons);

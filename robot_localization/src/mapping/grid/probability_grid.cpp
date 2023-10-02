@@ -20,7 +20,7 @@ Eigen::Vector2i ProbabilityGrid::getCell(Eigen::Vector2d pose){
 Eigen::Vector2i ProbabilityGrid::getCell(Pose2D pose){
     return getCell(pose.x, pose.y);
 }
-double ProbabilityGrid::getProbability(Eigen::Vector2i pose_i){
+double ProbabilityGrid::getProbability(Eigen::Vector2i pose_i) const{
     if(MAP_VALID(map_meta_, pose_i[0], pose_i[1])){
         int index = MAP_INDEX(map_meta_, pose_i[0], pose_i[1]);
         return probability_data_[index];
@@ -55,13 +55,13 @@ void ProbabilityGrid::reset(){
     current_data_ = raw_data_;
     updateMapMetaToProbability();
 }
-OccupancyGrid ProbabilityGrid::getRawMap(){
+OccupancyGrid ProbabilityGrid::getRawMap() const{
     OccupancyGrid map;
     map.info = *map_meta_;
     map.data = raw_data_;
     return map;
 }
-OccupancyGrid ProbabilityGrid::getCurrentMap(){
+OccupancyGrid ProbabilityGrid::getCurrentMap() const{
     OccupancyGrid map;
     map.info = *map_meta_;
     map.data = current_data_;
@@ -78,7 +78,7 @@ void ProbabilityGrid::updateMapMetaToProbability(){
         }
     }
 }
-nav_msgs::msg::MapMetaData ProbabilityGrid::getMapMeta(){
+nav_msgs::msg::MapMetaData ProbabilityGrid::getMapMeta() const{
     return *map_meta_.get();
 }
 }}}

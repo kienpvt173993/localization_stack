@@ -22,15 +22,15 @@ Eigen::Vector2i getCell(Eigen::Vector2d pose);
 Eigen::Vector2i getCell(double x, double y);
 Eigen::Vector2i getCell(geometry_msgs::msg::Pose2D pose);
 
-double getProbability(Eigen::Vector2i pose_i);
+double getProbability(Eigen::Vector2i pose_i) const;
 void setProbability(Eigen::Vector2i pose_i, float probability);
 
 void reset();
 void reset(nav_msgs::msg::OccupancyGrid* ros_map);
 
-nav_msgs::msg::OccupancyGrid getRawMap();
-nav_msgs::msg::OccupancyGrid getCurrentMap();
-nav_msgs::msg::MapMetaData getMapMeta();
+nav_msgs::msg::OccupancyGrid getRawMap() const;
+nav_msgs::msg::OccupancyGrid getCurrentMap() const;
+nav_msgs::msg::MapMetaData getMapMeta() const;
 
 protected:
 void updateMapMetaToProbability();

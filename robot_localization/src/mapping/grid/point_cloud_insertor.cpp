@@ -15,7 +15,7 @@ PointCloudInsertor::PointCloudInsertor(PointCloudInsertOption* options){
 }
 PointCloudInsertor::~PointCloudInsertor(){}
 void PointCloudInsertor::Insert(const sensor::PointCloud& point_cloud, 
-    Pose2D pose, ProbabilityGrid* grid){
+    Pose2D pose, ProbabilityGrid* grid) const{
     Pose2D tf = pose;
     sensor::PointCloud transfromed_point_cloud = utils::transformPointCloud(point_cloud, tf);
     for(auto point: transfromed_point_cloud.points){
@@ -25,19 +25,19 @@ void PointCloudInsertor::Insert(const sensor::PointCloud& point_cloud,
         updateAPointCloud(point, pose, grid, false);
     }
 }
-void PointCloudInsertor::updateCell(Eigen::Vector2i cell, bool hit ,ProbabilityGrid* grid){
+void PointCloudInsertor::updateCell(Eigen::Vector2i cell, bool hit ,ProbabilityGrid* grid) const{
     auto cell_p = grid->getProbability(cell);
     auto p = (hit)? options_->hit_probability: options_->miss_probability;
     auto new_cell_p = 1./odds(odds(p)*odds(cell_p));
     new_cell_p = utils::clamp(new_cell_p, 0.1, 0.9);
     grid->setProbability(cell, new_cell_p);
 }
-double PointCloudInsertor::odds(double p){
+double PointCloudInsertor::odds(double p) const{
     assert(p > 0.);
     return abs(p/(1-p));
 }
 void PointCloudInsertor::updateAPointCloud(Point32 point, 
-    Pose2D pose, ProbabilityGrid* grid, bool hit){
+    Pose2D pose, ProbabilityGrid* grid, bool hit)const{
     auto cell_list = getCellsInRangeData(point, pose, grid);
     if(!cell_list.empty()){
         for(size_t i = 0; i < cell_list.size() - 1; i++){
@@ -46,8 +46,8 @@ void PointCloudInsertor::updateAPointCloud(Point32 point,
         updateCell(cell_list.back(), hit, grid);
     }
 }
-std::vector<Eigen::Vector2i> getCellsInRangeData(Point32 point, 
-    Pose2D pose, ProbabilityGrid* grid){
+std::vector<Eigen::Vector2i> PointCloudInsertor::getCellsInRangeData(
+    Point32 point, Pose2D pose, ProbabilityGrid* grid) const{
     std::unordered_set<int64_t> cells_set;
     std::vector<Eigen::Vector2i> cells_list;
     auto delta_x = point.x - pose.x;

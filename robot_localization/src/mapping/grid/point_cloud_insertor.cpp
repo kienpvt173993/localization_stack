@@ -61,7 +61,9 @@ std::vector<Eigen::Vector2i> PointCloudInsertor::getCellsInRangeData(
         double x = cos_value*resolution*i + pose.x;
         double y = sin_value*resolution*i + pose.y;
         auto cell = grid->getCell(x,y);
-        int64_t key = cell[0] << 32 || cell[1];
+        int64_t x_i = (int64_t)cell[0];
+        int64_t y_i = (int64_t)cell[1];
+        int64_t key = (x_i << 32) + y_i;
         if (!(cells_set.count(key) > 0)){
             cells_list.push_back(cell);
             cells_set.insert(key);

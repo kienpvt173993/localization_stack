@@ -18,9 +18,9 @@ public:
 explicit ProbabilityGrid(nav_msgs::msg::OccupancyGrid* ros_map);
 ~ProbabilityGrid();
 
-Eigen::Vector2i getCell(Eigen::Vector2d pose);
-Eigen::Vector2i getCell(double x, double y);
-Eigen::Vector2i getCell(geometry_msgs::msg::Pose2D pose);
+Eigen::Vector2i getCell(Eigen::Vector2d pose) const;
+Eigen::Vector2i getCell(double x, double y) const;
+Eigen::Vector2i getCell(geometry_msgs::msg::Pose2D pose) const;
 
 double getProbability(Eigen::Vector2i pose_i) const;
 void setProbability(Eigen::Vector2i pose_i, float probability);

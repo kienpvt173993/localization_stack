@@ -10,7 +10,7 @@ namespace ceres_cost_functor{
 // the solution's distance from 'target_angle'.
 class RotationDeltaCostFunctor2D {
 public:
-static ceres::CostFunction* CreateAutoDiffCostFunction(
+static ceres::CostFunction* createAutoDiffCostFunction(
     const double scaling_factor, const double target_angle) {
     return new ceres::AutoDiffCostFunction<
         RotationDeltaCostFunctor2D, 1 /* residuals */, 3 /* pose variables */>(

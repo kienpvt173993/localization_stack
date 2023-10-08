@@ -11,13 +11,13 @@ ProbabilityGrid::ProbabilityGrid(OccupancyGrid* ros_map){
     reset(ros_map);
 }
 ProbabilityGrid::~ProbabilityGrid(){}
-Eigen::Vector2i ProbabilityGrid::getCell(double x, double y){
+Eigen::Vector2i ProbabilityGrid::getCell(double x, double y) const{
     return {MAP_GXWX(map_meta_, x), MAP_GYWY(map_meta_, y)};
 }
-Eigen::Vector2i ProbabilityGrid::getCell(Eigen::Vector2d pose){
+Eigen::Vector2i ProbabilityGrid::getCell(Eigen::Vector2d pose) const{
     return getCell(pose[0], pose[1]);
 }
-Eigen::Vector2i ProbabilityGrid::getCell(Pose2D pose){
+Eigen::Vector2i ProbabilityGrid::getCell(Pose2D pose) const{
     return getCell(pose.x, pose.y);
 }
 double ProbabilityGrid::getProbability(Eigen::Vector2i pose_i) const{

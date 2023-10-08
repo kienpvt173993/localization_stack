@@ -11,7 +11,7 @@ namespace mapping{
 namespace scan_matching{
 namespace ceres_cost_functor{
 class OccupiedSpaceCostFunction {
- public:
+public:
   OccupiedSpaceCostFunction(const double scaling_factor,
                               const sensor::PointCloud& point_cloud,
                               const grid::ProbabilityGrid& grid)
@@ -29,52 +29,31 @@ class OccupiedSpaceCostFunction {
 
     const GridArrayAdapter adapter(grid_);
     ceres::BiCubicInterpolator<GridArrayAdapter> interpolator(adapter);
-    const MapMetaData& limits = grid_.limits();
-
+    const MapMetaData& limits = grid_.getMapMeta();
     for (size_t i = 0; i < point_cloud_.size(); ++i) {
-      // Note that this is a 2D point. The third component is a scaling factor.
       const Eigen::Matrix<T, 3, 1> point((T(point_cloud_.points[i].x)),
                                          (T(point_cloud_.points[i].y)),
                                          T(1.));
       const Eigen::Matrix<T, 3, 1> world = transform * point;
-      interpolator.Evaluate(
-          (limits.width - world[0]) / limits.resolution() - 0.5 +
-              static_cast<double>(kPadding),
-          (limits.height - world[1]) / limits.resolution() - 0.5 +
-              static_cast<double>(kPadding),
-          &residual[i]);
+      interpolator.Evaluate((world[0] - (T)limits.origin.position.x)/((T)limits.resolution) + (T)0.5 + (T)(limits.width/2),
+        (world[1] - (T)limits.origin.position.y)/((T)limits.resolution) + (T)0.5 + (T)(limits.height/2),
+        &residual[i]);
       residual[i] = scaling_factor_ * residual[i];
     }
     return true;
   }
 
- private:
-  static constexpr int kPadding = INT_MAX / 4;
+private:
   class GridArrayAdapter {
-   public:
+  public:
     enum { DATA_DIMENSION = 1 };
 
     explicit GridArrayAdapter(const grid::ProbabilityGrid& grid) : grid_(grid) {}
 
     void GetValue(const int row, const int column, double* const value) const {
-      if (row < kPadding || column < kPadding || row >= NumRows() - kPadding ||
-          column >= NumCols() - kPadding) {
-        *value = kMaxCorrespondenceCost;
-      } else {
-        *value = static_cast<double>(1.0 - grid_.getProbability(
-            Eigen::Array2i(column - kPadding, row - kPadding)));
-      }
+        *value = 1.0 - grid_.getProbability({column, row});
     }
-
-    int NumRows() const {
-      return grid_.getMapMeta().width + 2 * kPadding;
-    }
-
-    int NumCols() const {
-      return grid_.getMapMeta().height + 2 * kPadding;
-    }
-
-   private:
+  private:
     const grid::ProbabilityGrid& grid_;
   };
 
@@ -86,7 +65,7 @@ class OccupiedSpaceCostFunction {
   const sensor::PointCloud& point_cloud_;
   const grid::ProbabilityGrid& grid_;
 };
-inline ceres::CostFunction* CreateOccupiedSpaceCostFunction(
+inline ceres::CostFunction* createOccupiedSpaceCostFunction(
     const double scaling_factor,const sensor::PointCloud& point_cloud,
     const grid::ProbabilityGrid& grid) {
     return new ceres::AutoDiffCostFunction<OccupiedSpaceCostFunction,

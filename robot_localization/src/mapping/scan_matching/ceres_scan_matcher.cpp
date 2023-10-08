@@ -45,14 +45,14 @@ void CeresScanMatcher::match(const geometry_msgs::msg::Pose2D target_translation
     else if(options_->loss == huber)
         loss_func = new ceres::CauchyLoss(0.7);
     problem.AddResidualBlock(
-        ceres_cost_functor::CreateOccupiedSpaceCostFunction(options_->occupied_space_weight,
+        ceres_cost_functor::createOccupiedSpaceCostFunction(options_->occupied_space_weight,
             point_cloud, grid), loss_func, ceres_pose_estimate);
     problem.AddResidualBlock(
         ceres_cost_functor::TranslationDeltaCostFunctor2D::createAutoDiffCostFunction(
             options_->translation_weight,
             target_translation.x, target_translation.y), loss_func, ceres_pose_estimate);
     problem.AddResidualBlock(
-        ceres_cost_functor::RotationDeltaCostFunctor2D::CreateAutoDiffCostFunction(
+        ceres_cost_functor::RotationDeltaCostFunctor2D::createAutoDiffCostFunction(
             options_->rotation_weight,
             ceres_pose_estimate[2]), loss_func, ceres_pose_estimate);
     ceres::Solve(*ceres_options_, &problem, sum_);

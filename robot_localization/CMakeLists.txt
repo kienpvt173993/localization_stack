@@ -24,6 +24,7 @@ endforeach()
 include_directories(include)
 add_library(${library_name} SHARED
   src/mapping/grid/probability_grid.cpp
+  src/mapping/grid/point_cloud_insertor.cpp
   src/mapping/sensor/point_cloud.cpp
   src/mapping/sensor/voxel_filter.cpp
 )

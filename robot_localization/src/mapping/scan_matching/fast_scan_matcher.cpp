@@ -49,8 +49,6 @@ PrecomputationGrid::PrecomputationGrid(const grid::Grid& grid,
     CHECK_GE(wide_limits_.width, 1);
     CHECK_GE(wide_limits_.height, 1);
     const int stride = wide_limits_.width;
-    // First we compute the maximum probability for each (x0, y) achieved in the
-    // span defined by x0 <= x < x0 + width.
     std::vector<float>& intermediate = *reusable_intermediate_grid;
     auto limits = grid.getMapMeta();
     intermediate.resize(wide_limits_.width * limits.height);

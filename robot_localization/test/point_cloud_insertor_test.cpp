@@ -24,6 +24,6 @@ TEST(PointCloudInsertorTest, insert_point_cloud){
     map.info.width = 100;
     map.info.height = 100;
     map.info.resolution = 0.05;
-    grid::ProbabilityGrid grid(&map);
+    grid::Grid grid(&map);
     auto laser = createPointCloud();
 }

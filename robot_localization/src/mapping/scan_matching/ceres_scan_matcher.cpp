@@ -26,7 +26,7 @@ ceres::Solver::Options* CeresScanMatcher::getCeresOptions(){return ceres_options
 ceres::Solver::Summary* CeresScanMatcher::getSummary(){return sum_;}
 void CeresScanMatcher::match(const geometry_msgs::msg::Pose2D target_translation,
     const geometry_msgs::msg::Pose2D initial_pose_estimate,
-    const sensor::PointCloud& point_cloud,const grid::ProbabilityGrid& grid,
+    const sensor::PointCloud& point_cloud,const grid::Grid& grid,
     geometry_msgs::msg::Pose2D* pose_estimate) const{
     double ceres_pose_estimate[3] = {initial_pose_estimate.x,
                                     initial_pose_estimate.y,

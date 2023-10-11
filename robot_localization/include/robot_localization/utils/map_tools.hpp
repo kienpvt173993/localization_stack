@@ -2,7 +2,7 @@
 #define MAP_TOOLS__HPP__
 #include "nav_msgs/msg/map_meta_data.hpp"
 
-#define MAP_WXGX(map_infor, i) (map_infor->origin.position.x + ((i) - map_infor->width / 2) * map_infor->info.resolution)
+#define MAP_WXGX(map_infor, i) (map_infor->origin.position.x + ((i) - map_infor->width / 2) * map_infor->resolution)
 #define MAP_WYGY(map_infor, j) (map_infor->origin.position.y + ((j) - map_infor->height / 2) * map_infor->resolution)
 
 // Convert from world coords to map coords

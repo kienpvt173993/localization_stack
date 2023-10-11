@@ -13,10 +13,10 @@ namespace grid{
  * range from 0.1 to 0.9: inflation
  * 
  */
-class ProbabilityGrid{
+class Grid{
 public:
-explicit ProbabilityGrid(nav_msgs::msg::OccupancyGrid* ros_map);
-~ProbabilityGrid();
+explicit Grid(nav_msgs::msg::OccupancyGrid* ros_map);
+~Grid();
 
 Eigen::Vector2i getCell(Eigen::Vector2d pose) const;
 Eigen::Vector2i getCell(double x, double y) const;

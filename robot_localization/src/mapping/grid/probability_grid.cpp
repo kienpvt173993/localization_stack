@@ -7,20 +7,20 @@ using namespace geometry_msgs::msg;
 namespace robot_localization{
 namespace mapping{
 namespace grid{
-ProbabilityGrid::ProbabilityGrid(OccupancyGrid* ros_map){
+Grid::Grid(OccupancyGrid* ros_map){
     reset(ros_map);
 }
-ProbabilityGrid::~ProbabilityGrid(){}
-Eigen::Vector2i ProbabilityGrid::getCell(double x, double y) const{
+Grid::~Grid(){}
+Eigen::Vector2i Grid::getCell(double x, double y) const{
     return {MAP_GXWX(map_meta_, x), MAP_GYWY(map_meta_, y)};
 }
-Eigen::Vector2i ProbabilityGrid::getCell(Eigen::Vector2d pose) const{
+Eigen::Vector2i Grid::getCell(Eigen::Vector2d pose) const{
     return getCell(pose[0], pose[1]);
 }
-Eigen::Vector2i ProbabilityGrid::getCell(Pose2D pose) const{
+Eigen::Vector2i Grid::getCell(Pose2D pose) const{
     return getCell(pose.x, pose.y);
 }
-double ProbabilityGrid::getProbability(Eigen::Vector2i pose_i) const{
+double Grid::getProbability(Eigen::Vector2i pose_i) const{
     if(MAP_VALID(map_meta_, pose_i[0], pose_i[1])){
         int index = MAP_INDEX(map_meta_, pose_i[0], pose_i[1]);
         return probability_data_[index];
@@ -29,7 +29,7 @@ double ProbabilityGrid::getProbability(Eigen::Vector2i pose_i) const{
         return 0.1;
     }
 }
-void ProbabilityGrid::setProbability(Eigen::Vector2i pose_i, float probability){
+void Grid::setProbability(Eigen::Vector2i pose_i, float probability){
     if(MAP_VALID(map_meta_, pose_i[0], pose_i[1])){
         int index = MAP_INDEX(map_meta_, pose_i[0], pose_i[1]);
         probability = utils::clamp(probability, 0.1f, 0.9f);
@@ -39,7 +39,7 @@ void ProbabilityGrid::setProbability(Eigen::Vector2i pose_i, float probability){
         else if(current_data_[index] == -1) current_data_[index] = 0;
     }
 }
-void ProbabilityGrid::reset(OccupancyGrid* ros_map){
+void Grid::reset(OccupancyGrid* ros_map){
     if (ros_map == nullptr){
         reset();
     }
@@ -51,23 +51,23 @@ void ProbabilityGrid::reset(OccupancyGrid* ros_map){
         updateMapMetaToProbability();
     }
 }
-void ProbabilityGrid::reset(){
+void Grid::reset(){
     current_data_ = raw_data_;
     updateMapMetaToProbability();
 }
-OccupancyGrid ProbabilityGrid::getRawMap() const{
+OccupancyGrid Grid::getRawMap() const{
     OccupancyGrid map;
     map.info = *map_meta_;
     map.data = raw_data_;
     return map;
 }
-OccupancyGrid ProbabilityGrid::getCurrentMap() const{
+OccupancyGrid Grid::getCurrentMap() const{
     OccupancyGrid map;
     map.info = *map_meta_;
     map.data = current_data_;
     return map;
 }
-void ProbabilityGrid::updateMapMetaToProbability(){
+void Grid::updateMapMetaToProbability(){
     probability_data_.clear();
     for(const auto &data : raw_data_){
         if(data == 100){
@@ -78,7 +78,7 @@ void ProbabilityGrid::updateMapMetaToProbability(){
         }
     }
 }
-nav_msgs::msg::MapMetaData ProbabilityGrid::getMapMeta() const{
+nav_msgs::msg::MapMetaData Grid::getMapMeta() const{
     return *map_meta_.get();
 }
 }}}

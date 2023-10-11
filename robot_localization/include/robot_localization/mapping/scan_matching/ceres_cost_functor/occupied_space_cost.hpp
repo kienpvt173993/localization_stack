@@ -14,7 +14,7 @@ class OccupiedSpaceCostFunction {
 public:
   OccupiedSpaceCostFunction(const double scaling_factor,
                               const sensor::PointCloud& point_cloud,
-                              const grid::ProbabilityGrid& grid)
+                              const grid::Grid& grid)
       : scaling_factor_(scaling_factor),
         point_cloud_(point_cloud),
         grid_(grid) {}
@@ -48,13 +48,13 @@ private:
   public:
     enum { DATA_DIMENSION = 1 };
 
-    explicit GridArrayAdapter(const grid::ProbabilityGrid& grid) : grid_(grid) {}
+    explicit GridArrayAdapter(const grid::Grid& grid) : grid_(grid) {}
 
     void GetValue(const int row, const int column, double* const value) const {
         *value = 1.0 - grid_.getProbability({column, row});
     }
   private:
-    const grid::ProbabilityGrid& grid_;
+    const grid::Grid& grid_;
   };
 
   OccupiedSpaceCostFunction(const OccupiedSpaceCostFunction&) = delete;
@@ -63,11 +63,11 @@ private:
 
   const double scaling_factor_;
   const sensor::PointCloud& point_cloud_;
-  const grid::ProbabilityGrid& grid_;
+  const grid::Grid& grid_;
 };
 inline ceres::CostFunction* createOccupiedSpaceCostFunction(
     const double scaling_factor,const sensor::PointCloud& point_cloud,
-    const grid::ProbabilityGrid& grid) {
+    const grid::Grid& grid) {
     return new ceres::AutoDiffCostFunction<OccupiedSpaceCostFunction,
                                             ceres::DYNAMIC /* residuals */,
                                             3 /* pose variables */>(

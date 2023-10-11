@@ -6,7 +6,7 @@
 namespace robot_localization{
 namespace mapping{
 namespace scan_matching{
-class FastScanMatcherOptions{
+struct FastScanMatcherOptions{
     double linear_search_window = 0.1;
     double angular_search_window = 0.2;
     int branch_and_bound_depth = 6;
@@ -14,8 +14,8 @@ class FastScanMatcherOptions{
 
 class PrecomputationGrid {
 public:
-PrecomputationGrid(const grid::ProbabilityGrid& grid, int width, std::vector<float>* reusable_intermediate_grid);
-int GetValue(const Eigen::Array2i& xy_index) const {
+PrecomputationGrid(const grid::Grid& grid, int width, std::vector<float>* reusable_intermediate_grid);
+int getValue(const Eigen::Array2i& xy_index) const {
     const Eigen::Array2i local_xy_index = xy_index - offset_;
     if (static_cast<unsigned>(local_xy_index.x()) >=
             static_cast<unsigned>(wide_limits_.width) ||
@@ -26,34 +26,34 @@ int GetValue(const Eigen::Array2i& xy_index) const {
     const int stride = wide_limits_.width;
     return cells_[local_xy_index.x() + local_xy_index.y() * stride];
 }
-float ToScore(float value) const {
+float toScore(float value) const {
 return min_score_ + value * ((max_score_ - min_score_) / 255.f);
 }
 private:
-uint8_t ComputeCellValue(float probability) const;
+uint8_t computeCellValue(float probability) const;
 const Eigen::Array2i offset_;
 const nav_msgs::msg::MapMetaData wide_limits_;
-const float min_score_;
-const float max_score_;
+const float min_score_{0.1};
+const float max_score_{0.9};
 std::vector<uint8_t> cells_;
 };
-class PrecomputationGridStack2D {
+class PrecomputationGridStack {
 public:
-PrecomputationGridStack2D(
-    const grid::ProbabilityGrid& grid,
+PrecomputationGridStack(
+    const grid::Grid& grid,
     const FastScanMatcherOptions& options);
 
-const PrecomputationGrid& Get(int index) {
-return precomputation_grids_[index];
+const PrecomputationGrid& get(int index) {
+    return precomputation_grids_[index];
 }
-int max_depth() const { return precomputation_grids_.size() - 1; }
+int maxDepth() const { return precomputation_grids_.size() - 1; }
 private:
 std::vector<PrecomputationGrid> precomputation_grids_;
 };
 class FastCorrelativeScanMatcher {
 public:
 FastCorrelativeScanMatcher(
-    const grid::ProbabilityGrid& grid,
+    const grid::Grid& grid,
     const FastScanMatcherOptions& options);
 ~FastCorrelativeScanMatcher();
 
@@ -87,7 +87,7 @@ Candidate branchAndBound(const std::vector<DiscreteScan>& discrete_scans,
                             int candidate_depth, float min_score) const;
 const FastScanMatcherOptions options_;
 nav_msgs::msg::MapMetaData limits_;
-std::unique_ptr<PrecomputationGridStack2D> precomputation_grid_stack_;
+std::unique_ptr<PrecomputationGridStack> precomputation_grid_stack_;
 };
 }}}
 #endif

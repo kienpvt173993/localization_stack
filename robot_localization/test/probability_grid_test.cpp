@@ -6,7 +6,7 @@ std::vector<int8_t> map_data = {100,100,0,100,
                                 100,0,100,0,
                                 -1,100,0,100,
                                 0,-1,0,100};
-ProbabilityGrid createGrid(){
+Grid createGrid(){
     OccupancyGrid ros_map;
     ros_map.info.width = 4;
     ros_map.info.height = 4;
@@ -15,7 +15,7 @@ ProbabilityGrid createGrid(){
     ros_map.info.origin.position.y = 0.05;
     ros_map.info.origin.orientation.w = 1.;
     ros_map.data = map_data;
-    ProbabilityGrid grid(&ros_map);
+    Grid grid(&ros_map);
     return grid;
 }
 

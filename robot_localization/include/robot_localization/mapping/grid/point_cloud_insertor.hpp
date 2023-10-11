@@ -14,14 +14,14 @@ public:
 PointCloudInsertor(PointCloudInsertOption* option);
 ~PointCloudInsertor();
 void Insert(const sensor::PointCloud& range_data, geometry_msgs::msg::Pose2D pose,
-                      ProbabilityGrid* grid) const;
+                      Grid* grid) const;
 protected:
 std::shared_ptr<PointCloudInsertOption> options_;
 void updateAPointCloud(geometry_msgs::msg::Point32 point, geometry_msgs::msg::Pose2D pose, 
-    ProbabilityGrid* grid, bool hit) const;
+    Grid* grid, bool hit) const;
 std::vector<Eigen::Vector2i> getCellsInRangeData(geometry_msgs::msg::Point32 point, 
-    geometry_msgs::msg::Pose2D pose, ProbabilityGrid* grid) const;
-void updateCell(Eigen::Vector2i cell, bool hit ,ProbabilityGrid* grid) const;
+    geometry_msgs::msg::Pose2D pose, Grid* grid) const;
+void updateCell(Eigen::Vector2i cell, bool hit ,Grid* grid) const;
 double odds(double p) const;
 };
 }

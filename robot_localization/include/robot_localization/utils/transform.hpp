@@ -58,6 +58,13 @@ inline mapping::sensor::PointCloud transformPointCloud(mapping::sensor::PointClo
     des.missing_point = transformPointArray(source.missing_point, tf);
     return des;
 }
+inline mapping::sensor::PointCloud rotatePointCloud(mapping::sensor::PointCloud source, double angle){
+    geometry_msgs::msg::Pose2D tf;
+    tf.x = 0;
+    tf.y = 0;
+    tf.theta = angle;
+    return transformPointCloud(source, tf);
+}
 }
 }
 #endif

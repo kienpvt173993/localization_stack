@@ -80,17 +80,13 @@ std::vector<sensor::PointCloud> generateRotatedScans(
     for (int scan_index = 0; scan_index < search_parameters.num_scans;
         ++scan_index,
             delta_theta += search_parameters.angular_perturbation_step_size) {
-        Pose2D tf;
-        tf.x = 0.;
-        tf.y = 0.;
-        tf.theta = delta_theta;
-        rotated_scans.push_back(utils::transformPointCloud(point_cloud, tf));
+        rotated_scans.push_back(utils::rotatePointCloud(point_cloud, delta_theta));
     }
     return rotated_scans;
 }
 
 std::vector<DiscreteScan> discretizeScans(
-    const grid::ProbabilityGrid& grid, const std::vector<sensor::PointCloud>& scans,
+    const grid::Grid& grid, const std::vector<sensor::PointCloud>& scans,
     const Eigen::Translation2f& initial_translation) {
     std::vector<DiscreteScan> discrete_scans;
     discrete_scans.reserve(scans.size());

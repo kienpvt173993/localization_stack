@@ -29,6 +29,24 @@ double Grid::getProbability(Eigen::Vector2i pose_i) const{
         return 0.1;
     }
 }
+int8_t Grid::getValueAtRaw(Eigen::Vector2i pose_i) const{
+    if(MAP_VALID(map_meta_, pose_i[0], pose_i[1])){
+        int index = MAP_INDEX(map_meta_, pose_i[0], pose_i[1]);
+        return raw_data_[index];
+    }
+    else{
+        return -1;
+    }
+}
+int8_t Grid::getValueAtCurrent(Eigen::Vector2i pose_i) const{
+    if(MAP_VALID(map_meta_, pose_i[0], pose_i[1])){
+        int index = MAP_INDEX(map_meta_, pose_i[0], pose_i[1]);
+        return current_data_[index];
+    }
+    else{
+        return -1;
+    }
+}
 void Grid::setProbability(Eigen::Vector2i pose_i, float probability){
     if(MAP_VALID(map_meta_, pose_i[0], pose_i[1])){
         int index = MAP_INDEX(map_meta_, pose_i[0], pose_i[1]);

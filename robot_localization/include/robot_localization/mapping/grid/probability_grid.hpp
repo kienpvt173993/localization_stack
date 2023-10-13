@@ -23,6 +23,8 @@ Eigen::Vector2i getCell(double x, double y) const;
 Eigen::Vector2i getCell(geometry_msgs::msg::Pose2D pose) const;
 
 double getProbability(Eigen::Vector2i pose_i) const;
+int8_t getValueAtRaw(Eigen::Vector2i pose_i) const;
+int8_t getValueAtCurrent(Eigen::Vector2i pose_i) const;
 void setProbability(Eigen::Vector2i pose_i, float probability);
 
 void reset();

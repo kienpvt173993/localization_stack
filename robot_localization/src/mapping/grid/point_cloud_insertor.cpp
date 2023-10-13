@@ -1,9 +1,11 @@
 #include "robot_localization/mapping/grid/point_cloud_insertor.hpp"
 #include "robot_localization/utils/transform.hpp"
 #include "robot_localization/utils/maths.hpp"
+#include "robot_localization/utils/map_tools.hpp"
 #include "tf2/utils.h"
 #include <unordered_set>
 using namespace geometry_msgs::msg;
+using namespace nav_msgs::msg;
 namespace robot_localization{
 namespace mapping{
 namespace grid{
@@ -26,11 +28,21 @@ void PointCloudInsertor::Insert(const sensor::PointCloud& point_cloud,
     }
 }
 void PointCloudInsertor::updateCell(Eigen::Vector2i cell, bool hit ,Grid* grid) const{
-    auto cell_p = grid->getProbability(cell);
-    auto p = (hit)? options_->hit_probability: options_->miss_probability;
-    auto new_cell_p = 1./odds(odds(p)*odds(cell_p));
-    new_cell_p = utils::clamp(new_cell_p, 0.1, 0.9);
-    grid->setProbability(cell, new_cell_p);
+    MapMetaData* map_meta = &grid->getMapMeta();
+    if(grid->getValueAtCurrent(cell) != -1){
+        auto cell_p = grid->getProbability(cell);
+        auto p = (hit)? options_->hit_probability: options_->miss_probability;
+        auto new_cell_p = 1./odds(odds(p)*odds(cell_p));
+        new_cell_p = utils::clamp(new_cell_p, 0.1, 0.9);
+        grid->setProbability(cell, new_cell_p);
+    }
+    else if (hit){
+        grid->setProbability(cell, options_->hit_probability);
+    }
+    else{
+        grid->setProbability(cell, options_->miss_probability);
+    }
+    
 }
 double PointCloudInsertor::odds(double p) const{
     assert(p > 0.);
@@ -57,13 +69,19 @@ std::vector<Eigen::Vector2i> PointCloudInsertor::getCellsInRangeData(
     auto cos_value = delta_x/length;
     int cnt = (int) (length/grid->getMapMeta().resolution);
     double resolution = grid->getMapMeta().resolution;
+    auto pose_cell = grid->getCell(pose.x, pose.y);
+    auto cellIntToKey = [](Eigen::Vector2i cell){
+        int64_t x_i = (int64_t)cell[0];
+        int64_t y_i = (int64_t)cell[1];
+        int64_t key = (x_i << 32) + y_i;
+        return key;
+    };
+    cells_set.insert(cellIntToKey(pose_cell));
     for(int i = 0; i < cnt; i++){
         double x = cos_value*resolution*i + pose.x;
         double y = sin_value*resolution*i + pose.y;
         auto cell = grid->getCell(x,y);
-        int64_t x_i = (int64_t)cell[0];
-        int64_t y_i = (int64_t)cell[1];
-        int64_t key = (x_i << 32) + y_i;
+        int64_t key = cellIntToKey(cell);
         if (!(cells_set.count(key) > 0)){
             cells_list.push_back(cell);
             cells_set.insert(key);

@@ -2,6 +2,7 @@
 #include "robot_localization/mapping/scan_matching/ceres_cost_functor/occupied_space_cost.hpp"
 #include "robot_localization/mapping/scan_matching/ceres_cost_functor/translation_delta_cost.hpp"
 #include "robot_localization/mapping/scan_matching/ceres_cost_functor/rotation_delta_cost.hpp"
+#include "robot_localization/utils/common.hpp"
 namespace robot_localization{
 namespace mapping{
 namespace scan_matching{
@@ -56,8 +57,8 @@ void CeresScanMatcher::match(const geometry_msgs::msg::Pose2D target_translation
             options_->rotation_weight,
             ceres_pose_estimate[2]), loss_func, ceres_pose_estimate);
     ceres::Solve(*ceres_options_, &problem, sum_);
-    pose_estimate->x = ceres_pose_estimate[0];
-    pose_estimate->y = ceres_pose_estimate[1];
-    pose_estimate->theta = ceres_pose_estimate[2];
+    *pose_estimate = utils::createPose2D(ceres_pose_estimate[0],
+        ceres_pose_estimate[1],
+        ceres_pose_estimate[2]);
 }
 }}}

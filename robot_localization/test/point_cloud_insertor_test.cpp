@@ -21,9 +21,15 @@ TEST(PointCloudInsertorTest, insert_point_cloud){
     for(int i = 0; i < 10000; i++){
         map.data.push_back(0);
     }
-    map.info.width = 100;
-    map.info.height = 100;
+    map.info.width = 1000;
+    map.info.height = 1000;
     map.info.resolution = 0.05;
     grid::Grid grid(&map);
     auto laser = createPointCloud();
+    grid::PointCloudInsertOption options;
+    options.hit_probability = 0.9;
+    options.miss_probability = 0.1;
+    grid::PointCloudInsertor insertor(&options);
+    geometry_msgs::msg::Pose2D pose;
+    insertor.insert(laser, pose, &grid);
 }

@@ -7,6 +7,7 @@
 #include "absl/memory/memory.h"
 #include "robot_localization/utils/transform.hpp"
 #include "robot_localization/utils/map_tools.hpp"
+#include "robot_localization/utils/common.hpp"
 using namespace geometry_msgs::msg;
 namespace robot_localization{
 namespace mapping{
@@ -156,11 +157,9 @@ bool FastCorrelativeScanMatcher::matchFullSubmap(const sensor::PointCloud& point
         1e6 * limits_.resolution,  // Linear search window, 1e6 cells/direction.
         M_PI,  // Angular search window, 180 degrees in both directions.
         point_cloud, limits_.resolution);
-    Pose2D center;
     auto limit_ptr = &limits_;
-    center.x = MAP_WXGX(limit_ptr,limits_.width * limits_.resolution / 2.);
-    center.y = MAP_WYGY(limit_ptr,limits_.height * limits_.resolution / 2.);
-    center.theta = 0.;
+    Pose2D center = utils::createPose2D(MAP_WXGX(limit_ptr,limits_.width * limits_.resolution / 2.),
+        MAP_WYGY(limit_ptr,limits_.height * limits_.resolution / 2.), 0.);
     return matchWithSearchParameters(search_parameters, center, point_cloud,
                                     min_score, score, pose_estimate);
 }
@@ -190,9 +189,9 @@ bool FastCorrelativeScanMatcher::matchWithSearchParameters(
         precomputation_grid_stack_->maxDepth(), min_score);
     if (best_candidate.score > min_score) {
         *score = best_candidate.score;
-        pose_estimate->x = initial_pose_estimate.x + best_candidate.x;
-        pose_estimate->y = initial_pose_estimate.y + best_candidate.y;
-        pose_estimate->theta = (initial_rotation * Eigen::Rotation2Dd(best_candidate.orientation)).angle();
+        *pose_estimate = utils::createPose2D(initial_pose_estimate.x + best_candidate.x,
+            initial_pose_estimate.y + best_candidate.y,
+            (initial_rotation * Eigen::Rotation2Dd(best_candidate.orientation)).angle());
         return true;
     }
     return false;

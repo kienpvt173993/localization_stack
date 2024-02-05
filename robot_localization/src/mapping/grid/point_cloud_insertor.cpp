@@ -11,30 +11,31 @@ namespace mapping{
 namespace grid{
 PointCloudInsertor::PointCloudInsertor(PointCloudInsertOption* options){
     assert(options!=nullptr);
-    options_.reset(options);
+    options_ = std::make_shared<PointCloudInsertOption>(*options);
     assert(options->miss_probability > 0. && options->miss_probability < 0.5);
     assert(options->hit_probability < 1.0 && options->hit_probability > 0.5);
 }
 PointCloudInsertor::~PointCloudInsertor(){}
-void PointCloudInsertor::Insert(const sensor::PointCloud& point_cloud, 
+void PointCloudInsertor::insert(const sensor::PointCloud& point_cloud, 
     Pose2D pose, Grid* grid) const{
     Pose2D tf = pose;
     sensor::PointCloud transfromed_point_cloud = utils::transformPointCloud(point_cloud, tf);
     for(auto point: transfromed_point_cloud.points){
         updateAPointCloud(point, pose, grid, true);
     }
-    for(auto point: transfromed_point_cloud.missing_point){
-        updateAPointCloud(point, pose, grid, false);
-    }
+    // for(auto point: transfromed_point_cloud.missing_point){
+    //     updateAPointCloud(point, pose, grid, false);
+    // }
 }
 void PointCloudInsertor::updateCell(Eigen::Vector2i cell, bool hit ,Grid* grid) const{
-    MapMetaData* map_meta = &grid->getMapMeta();
+    // MapMetaData* map_meta = new MapMetaData();
+    // *map_meta= grid->getMapMeta();
     if(grid->getValueAtCurrent(cell) != -1){
         auto cell_p = grid->getProbability(cell);
         auto p = (hit)? options_->hit_probability: options_->miss_probability;
         auto new_cell_p = 1./odds(odds(p)*odds(cell_p));
-        new_cell_p = utils::clamp(new_cell_p, 0.1, 0.9);
-        grid->setProbability(cell, new_cell_p);
+        // new_cell_p = utils::clamp(new_cell_p, 0.1, 0.9);
+        // grid->setProbability(cell, new_cell_p);
     }
     else if (hit){
         grid->setProbability(cell, options_->hit_probability);
@@ -42,7 +43,6 @@ void PointCloudInsertor::updateCell(Eigen::Vector2i cell, bool hit ,Grid* grid) 
     else{
         grid->setProbability(cell, options_->miss_probability);
     }
-    
 }
 double PointCloudInsertor::odds(double p) const{
     assert(p > 0.);

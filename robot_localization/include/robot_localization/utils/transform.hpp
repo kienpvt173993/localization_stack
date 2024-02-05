@@ -1,7 +1,6 @@
 #ifndef UTILS_TRANSFORM__HPP__
 #define UTILS_TRANSFORM__HPP__
-#include "geometry_msgs/msg/pose2_d.hpp"
-#include "geometry_msgs/msg/point32.hpp"
+#include "robot_localization/utils/common.hpp"
 #include "robot_localization/mapping/sensor/point_cloud.hpp"
 #include "eigen3/Eigen/Dense"
 #include "robot_localization/utils/maths.hpp"
@@ -17,11 +16,7 @@ inline geometry_msgs::msg::Pose2D transformPose2D(geometry_msgs::msg::Pose2D sou
                 sin(tf.theta), cos(tf.theta), 0.,
                 0.,0.,1.;
     des_v = tf_matrix*source_v + tf_v;
-    geometry_msgs::msg::Pose2D des;
-    des.x = des_v[0];
-    des.y = des_v[1];
-    des.theta = norminalAngle(des_v[2]);
-    return des;
+    return createPose2D(des_v[0], des_v[1], norminalAngle(des_v[2]));
 }
 inline geometry_msgs::msg::Point32 transformPoin2D(geometry_msgs::msg::Point32 source,
     geometry_msgs::msg::Pose2D tf){
@@ -32,10 +27,7 @@ inline geometry_msgs::msg::Point32 transformPoin2D(geometry_msgs::msg::Point32 s
     tf_matrix << cos(tf.theta), -sin(tf.theta),
                 sin(tf.theta), cos(tf.theta);
     des_v = tf_matrix*source_v + tf_v;
-    geometry_msgs::msg::Point32 des;
-    des.x = des_v[0];
-    des.y = des_v[1];
-    return des;
+    return createPoint32(des_v[0], des_v[1]);
 }
 inline std::vector<geometry_msgs::msg::Point32> transformPointArray(std::vector<geometry_msgs::msg::Point32> source,
     geometry_msgs::msg::Pose2D tf){
@@ -59,10 +51,7 @@ inline mapping::sensor::PointCloud transformPointCloud(mapping::sensor::PointClo
     return des;
 }
 inline mapping::sensor::PointCloud rotatePointCloud(mapping::sensor::PointCloud source, double angle){
-    geometry_msgs::msg::Pose2D tf;
-    tf.x = 0;
-    tf.y = 0;
-    tf.theta = angle;
+    auto tf = createPose2D(0.,0.,angle);
     return transformPointCloud(source, tf);
 }
 }

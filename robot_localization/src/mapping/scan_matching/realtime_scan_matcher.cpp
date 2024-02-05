@@ -83,9 +83,9 @@ double RealTimeCorrelativeScanMatcher::match(
 
     const Candidate& best_candidate =
         *std::max_element(candidates.begin(), candidates.end());
-    pose_estimate->x = initial_pose_estimate.x + best_candidate.x;
-    pose_estimate->y = initial_pose_estimate.y + best_candidate.y;
-    pose_estimate->theta = (initial_rotation * Eigen::Rotation2Dd(best_candidate.orientation)).angle();
+    *pose_estimate = utils::createPose2D(initial_pose_estimate.x + best_candidate.x,
+        initial_pose_estimate.y + best_candidate.y, 
+        (initial_rotation * Eigen::Rotation2Dd(best_candidate.orientation)).angle());
     return best_candidate.score;
 }
 

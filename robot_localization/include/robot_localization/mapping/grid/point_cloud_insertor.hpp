@@ -13,7 +13,7 @@ class PointCloudInsertor{
 public:
 PointCloudInsertor(PointCloudInsertOption* option);
 ~PointCloudInsertor();
-void Insert(const sensor::PointCloud& range_data, geometry_msgs::msg::Pose2D pose,
+void insert(const sensor::PointCloud& range_data, geometry_msgs::msg::Pose2D pose,
                       Grid* grid) const;
 protected:
 std::shared_ptr<PointCloudInsertOption> options_;

@@ -5,6 +5,7 @@
 #include "nav_msgs/msg/occupancy_grid.hpp"
 #include "eigen3/Eigen/Dense"
 #include "localization_node/transform/rigid_transform.hpp"
+#include "localization_node/sensor/point_cloud_interface.hpp"
 
 namespace localization_node{
 namespace grid{
@@ -24,7 +25,7 @@ public:
 
     virtual nav_msgs::msg::OccupancyGrid* getRosMap() const = 0;
 
-    virtual Eigen::Array3i getCellIndex(const Eigen::Vector3f& point) const = 0;
+    virtual Eigen::Array3i getCellIndex(const Point& point) const = 0;
 
     Eigen::Array3i getCellIndex(const transform::Rigid3f::Vector& point) const {
         return this->getCellIndex({point.x(), point.y(), point.z()});

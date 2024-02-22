@@ -2,6 +2,7 @@
 #define LOCALIZATION_STACK_VOXEL_FILTER__HPP__
 #include "eigen3/Eigen/Dense"
 #include <vector>
+#include "localization_node/sensor/point_cloud_interface.hpp"
 
 namespace localization_node{
 namespace sensor{
@@ -12,10 +13,11 @@ struct VoxelFilterOptions{
     float max_length = 0.5;
 };
 
-std::vector<Eigen::Vector3f> adaptiveVoxelFilter(const VoxelFilterOptions& options, 
-    const std::vector<Eigen::Vector3f>* points);
-std::vector<Eigen::Vector3f> voxelFilter(
-    const std::vector<Eigen::Vector3f>* points, const float resolution);
+Points adaptiveVoxelFilter(const VoxelFilterOptions& options, 
+    const Points* points);
+
+Points voxelFilter(
+    const Points* points, const float resolution);
 
 }}
 

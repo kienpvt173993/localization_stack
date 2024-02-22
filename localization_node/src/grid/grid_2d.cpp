@@ -9,9 +9,7 @@ namespace localization_node{
 namespace grid{
 
 Grid2D::Grid2D(const OccupancyGrid & map){
-    origin_ = map.dataset(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-;
+    origin_ = map.data;
     current_ = map.data;
     meta_data_ = map.info;
     for(const auto& value: origin_){
@@ -30,15 +28,11 @@ Grid2D::~Grid2D(){
 
 void Grid2D::setProbabilityGrid(const Eigen::Array3i & cell, 
     const float & p){
-    std::clamp()
+    std::clamp(p, 0.1f, 0.2f);
 }
 
 float Grid2D::getProbabilityGrid(const Eigen::Array3i & cell) const {
     return 0.f;
-}
-
-const GridType Grid2D::getGridType() const {
-    return GridType::Grid2DMap;
 }
 
 OccupancyGrid* Grid2D::getRosMap() const {

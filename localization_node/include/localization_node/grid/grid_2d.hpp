@@ -20,7 +20,7 @@ public:
 
     float getProbabilityGrid(const Eigen::Array3i & cell) const override final;
 
-    const GridType getGridType() const override final{
+    GridType getGridType() const override final{
         return GridType::Grid2DMap;
     }
 

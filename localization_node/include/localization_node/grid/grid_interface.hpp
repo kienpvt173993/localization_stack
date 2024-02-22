@@ -20,7 +20,7 @@ public:
 
     virtual float getProbabilityGrid(const Eigen::Array3i & cell) const = 0;
 
-    virtual const GridType getGridType() const = 0;
+    virtual GridType getGridType() const = 0;
 
     virtual nav_msgs::msg::OccupancyGrid* getRosMap() const = 0;
 

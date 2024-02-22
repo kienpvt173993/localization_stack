@@ -74,14 +74,14 @@ Eigen::Array3i Grid2D::getCellIndex(const sensor::Point& point) const {
 }
 
 Rigid3f Grid2D::getPosition(const Rigid3f & pose) const {
-    Rigid3f origin({meta_data_.origin.position.x,
+    Rigid3d origin({meta_data_.origin.position.x,
             meta_data_.origin.position.y, 
             meta_data_.origin.position.z},
         {meta_data_.origin.orientation.w,
             meta_data_.origin.orientation.x,
             meta_data_.origin.orientation.y,
             meta_data_.origin.orientation.z});
-    return pose*origin;
+    return pose*origin.cast<float>();
 }
 
 }

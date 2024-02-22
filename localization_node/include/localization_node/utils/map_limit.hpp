@@ -9,13 +9,13 @@ namespace utils{
 
 inline bool inRosMap2D(const nav_msgs::msg::MapMetaData& meta_data,
     const Eigen::Vector3i& position){
-    return meta_data.height >= position.y() 
-        && meta_data.width >= position.x();
+    return meta_data.height >= static_cast<uint32_t>(position.y()) 
+        && meta_data.width >= static_cast<uint32_t>(position.x());
 }
 
 inline size_t getValueIndex(const nav_msgs::msg::MapMetaData& meta_data,
     const Eigen::Vector3i& position){
-    return position.x() + position.y();
+    return position.x() + position.y()*meta_data.width;
 }
 
 inline int getXi(const nav_msgs::msg::MapMetaData& meta_data, const float& x){

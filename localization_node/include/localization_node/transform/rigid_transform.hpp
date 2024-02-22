@@ -3,6 +3,7 @@
 
 #include "eigen3/Eigen/Dense"
 #include "geometry_msgs/msg/pose.hpp"
+#include "absl/strings/substitute.h"
 
 namespace localization_node{
 namespace transform{

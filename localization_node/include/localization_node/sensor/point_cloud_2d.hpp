@@ -19,7 +19,7 @@ public:
     PointCloud2D(const sensor_msgs::msg::LaserScan& sensor,
         const transform::Rigid3f& origin, const float& min, const float& max);
 
-    const PointCloudType getPointCloudType() const override final{
+    PointCloudType getPointCloudType() const override final{
         return PointCloudType::PointCloud2D;
     };
 

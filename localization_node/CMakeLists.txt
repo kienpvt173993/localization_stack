@@ -4,24 +4,74 @@ project(localization_node)
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# find dependencies
 find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+
+set(execute_node localization_node)
+set(library_name ${execute_node}_package)
+
+set(dependencies 
+  geometry_msgs
+  nav_msgs
+  rclcpp
+  absl
+  Eigen3
+  Ceres
+)
+
+foreach(name IN LISTS dependencies)
+  find_package(${name} REQUIRED)
+endforeach()
+
+include_directories(include)
+  add_library(${library_name} SHARED
+  src/grid/grid_2d.cpp
+  src/sensor/point_cloud_2d.cpp
+
+)
+
+target_include_directories(${library_name} PUBLIC ${Eigen3_INCLUDE_DIRS})
+ament_target_dependencies(${library_name}
+  ${dependencies}
+  Eigen3
+)
+
+install(TARGETS ${library_name}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+)
+
+install(DIRECTORY include/
+  DESTINATION include/
+)
+
+# install(DIRECTORY
+#         map
+#         rviz
+#         launch
+#         config
+#         DESTINATION share/${PROJECT_NAME}/)
+
+target_link_libraries(${library_name}
+  ${CERES_LIBRARIES}
+  absl::algorithm
+  absl::base
+  absl::debugging
+  absl::flat_hash_map
+  absl::memory
+  absl::meta
+  absl::numeric
+  absl::str_format
+  absl::strings
+  absl::synchronization
+  absl::time
+  absl::utility 
+)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
-  # the following line skips the linter which checks for copyrights
-  # uncomment the line when a copyright and license is not present in all source files
-  #set(ament_cmake_copyright_FOUND TRUE)
-  # the following line skips cpplint (only works in a git repo)
-  # uncomment the line when this package is not in a git repo
-  #set(ament_cmake_cpplint_FOUND TRUE)
+  find_package(ament_cmake_gtest REQUIRED)
+  add_subdirectory(test)
   ament_lint_auto_find_test_dependencies()
 endif()
 

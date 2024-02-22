@@ -17,7 +17,7 @@ class PointCloudInterface
 {
 public:
     virtual ~PointCloudInterface(){};
-    virtual const PointCloudType getPointCloudType() const = 0;
+    virtual PointCloudType getPointCloudType() const = 0;
     virtual void clear() = 0;
     virtual bool empty() const = 0;
     virtual void pushBack(Point point ,float intensity) = 0;

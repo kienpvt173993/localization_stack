@@ -5,7 +5,9 @@ namespace localization_node{
 namespace sensor{
 
 Point convertToPoint(const float& range, const float& angle){
-    return Point({range*cos(angle), range*sin(angle), 0.f});
+    return Point({static_cast<float>(range*cos(angle)),
+        static_cast<float>(range*sin(angle)), 
+        0.f});
 }
 
 PointCloud2D::PointCloud2D(const sensor_msgs::msg::LaserScan& sensor,
@@ -53,6 +55,7 @@ PointCloud2D::PointCloud2D(const sensor_msgs::msg::LaserScan& sensor,
         }
         origin_data_.push_back(point);
     }
+    this->transform(origin);
 }
 
 PointCloud2D::~PointCloud2D(){
@@ -96,6 +99,7 @@ sensor_msgs::msg::PointCloud PointCloud2D::getRosPointCloud() const{
         intensity_channel.values.push_back(intensity);
     }
     pcl.channels.push_back(intensity_channel);
+    return pcl;
 }
 
 Points PointCloud2D::getPointCloud() const{

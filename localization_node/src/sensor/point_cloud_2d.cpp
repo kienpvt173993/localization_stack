@@ -111,15 +111,9 @@ Points PointCloud2D::getReturn() const{
 }
 
 void PointCloud2D::transform(const transform::Rigid3f& tf){
-    for(auto &point : this->origin_data_){
-        utils::transformPoint(point, tf);
-    }
-    for(auto &point : this->return_data_){
-        utils::transformPoint(point, tf);
-    }
-    for(auto &point : this->miss_data_){
-        utils::transformPoint(point, tf);
-    }
+    utils::transformPoints(this->origin_data_, tf);
+    utils::transformPoints(this->return_data_, tf);
+    utils::transformPoints(this->miss_data_, tf);
 }
 
 }}

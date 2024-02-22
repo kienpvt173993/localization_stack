@@ -26,12 +26,11 @@ public:
 
     nav_msgs::msg::OccupancyGrid* getRosMap() const override final;
 
-    Eigen::Array3i getCellIndex(const transform::Rigid3f& point) const;
+    Eigen::Array3i getCellIndex(const sensor::Point& point) const;
 
-    transform::Rigid3f::Vector getPoseTranslation(const transform::Rigid3f & pose) const override final;
+    transform::Rigid3f getPosition(const transform::Rigid3f & pose) const override final;
 
 protected:
-    std::vector<int8_t> origin_;
     std::vector<int8_t> current_;
     std::vector<float> probability_grid_;
     nav_msgs::msg::MapMetaData meta_data_;

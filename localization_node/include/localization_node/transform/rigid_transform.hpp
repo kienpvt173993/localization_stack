@@ -24,7 +24,7 @@ class Rigid3 {
 
         Rigid3(const geometry_msgs::msg::Pose & pose)
             : translation_({pose.position.x, pose.position.y, pose.position.z}),
-            rotation_({pose.orientation, pose.orientation.y,
+            rotation_({pose.orientation.x, pose.orientation.y,
                 pose.orientation.z, pose.orientation.w}) {}
 
         static Rigid3 rotation(const AngleAxis& angle_axis) {
@@ -62,6 +62,15 @@ class Rigid3 {
             const Quaternion rotation = rotation_.conjugate();
             const Vector translation = -(rotation * translation_);
             return Rigid3(translation, rotation);
+        }
+
+        Rigid3 operator*(const Rigid3& other) const {
+            // Transform translation
+            Vector new_translation = rotation_ * other.translation_ + translation_;
+            // Transform rotation
+            Quaternion new_rotation = rotation_ * other.rotation_;
+
+            return Rigid3(new_translation, new_rotation);
         }
 
         std::string debugString() const {

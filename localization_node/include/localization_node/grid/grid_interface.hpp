@@ -1,7 +1,6 @@
 #ifndef LOCALIZATION_STACK_GRID_INTERFACE__HPP__
 #define LOCALIZATION_STACK_GRID_INTERFACE__HPP__
 
-#include "geometry_msgs/msg/point.hpp"
 #include "nav_msgs/msg/occupancy_grid.hpp"
 #include "eigen3/Eigen/Dense"
 #include "localization_node/transform/rigid_transform.hpp"
@@ -25,17 +24,9 @@ public:
 
     virtual nav_msgs::msg::OccupancyGrid* getRosMap() const = 0;
 
-    virtual Eigen::Array3i getCellIndex(const Point& point) const = 0;
+    virtual Eigen::Array3i getCellIndex(const sensor::Point& point) const = 0;
 
-    Eigen::Array3i getCellIndex(const transform::Rigid3f::Vector& point) const {
-        return this->getCellIndex({point.x(), point.y(), point.z()});
-    }
-
-    Eigen::Array3i getCellIndex(const transform::Rigid3f& pose) const {
-        return this->getCellIndex(pose.translation());
-    }
-
-    virtual transform::Rigid3f::Vector getPoseTranslation(const transform::Rigid3f & pose) const = 0;
+    virtual transform::Rigid3f getPosition(const transform::Rigid3f & pose) const = 0;
 };
 
 }

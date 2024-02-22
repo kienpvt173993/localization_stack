@@ -12,6 +12,13 @@ inline void transformPoint(sensor::Point& point,
     point += tf.translation();
 }
 
+inline void transformPoints(sensor::Points& points,
+    const transform::Rigid3f& tf){
+    for(auto& point: points){
+        transformPoint(point, tf);
+    }
+}
+
 }
 }
 

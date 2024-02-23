@@ -15,10 +15,12 @@ public:
 
     ~Grid2D() override;
 
-    void setProbabilityGrid(const Eigen::Array3i & cell, 
+    void setProbability(const Eigen::Array3i & cell, 
         const float & p) override final;
 
-    float getProbabilityGrid(const Eigen::Array3i & cell) const override final;
+    float getProbability(const Eigen::Array3i & cell) const override final;
+
+    bool inLimit(const Eigen::Array3i & cell) const override final;
 
     GridType getGridType() const override final{
         return GridType::Grid2DMap;
@@ -28,7 +30,7 @@ public:
 
     Eigen::Array3i getCellIndex(const sensor::Point& point) const;
 
-    transform::Rigid3f getPosition(const transform::Rigid3f & pose) const override final;
+    transform::Rigid3f getPositionInImage(const transform::Rigid3f & pose) const override final;
 
 protected:
     std::vector<int8_t> current_;

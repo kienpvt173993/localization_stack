@@ -10,11 +10,13 @@ namespace sensor{
 class PointCloud2D : PointCloudInterface
 {
 
-public:
+public:    
     explicit PointCloud2D(const sensor_msgs::msg::LaserScan& sensor,
         const transform::Rigid3f& origin);
 
     PointCloud2D(const Points& points);
+
+    PointCloud2D();
 
     PointCloud2D(const sensor_msgs::msg::LaserScan& sensor,
         const transform::Rigid3f& origin, const float& min, const float& max);

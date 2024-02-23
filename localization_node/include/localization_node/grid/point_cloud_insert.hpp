@@ -12,7 +12,7 @@ public:
     PointCloudInsertInsert(const PointCloudInsertOption& option);
     ~PointCloudInsertInsert();
     void insert(GridInterface* grid, const transform::Rigid3f& origin, 
-        const sensor::PointCloudInterface& points) const override final;
+        const sensor::PointCloudInterface* points) const override final;
     PointCloudInsertOption& getOptions() override final;
 protected:
     PointCloudInsertOption options_;

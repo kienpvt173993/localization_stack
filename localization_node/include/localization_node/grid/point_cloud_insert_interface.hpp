@@ -18,7 +18,7 @@ class PointCloudInsertInterface
 public:
     virtual ~PointCloudInsertInterface();
     virtual void insert(GridInterface* grid, const transform::Rigid3f& origin, 
-        const sensor::PointCloudInterface& points) const = 0;
+        const sensor::PointCloudInterface* points) const = 0;
     virtual PointCloudInsertOption& getOptions() = 0;
 };
 

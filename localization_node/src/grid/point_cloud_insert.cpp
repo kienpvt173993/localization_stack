@@ -9,7 +9,7 @@ PointCloudInsertInsert::PointCloudInsertInsert(const PointCloudInsertOption& opt
 PointCloudInsertInsert::~PointCloudInsertInsert(){}
 
 void PointCloudInsertInsert::insert(GridInterface* grid, const transform::Rigid3f& origin, 
-    const sensor::PointCloudInterface& points) const{
+    const sensor::PointCloudInterface* points) const{
     
 }
 

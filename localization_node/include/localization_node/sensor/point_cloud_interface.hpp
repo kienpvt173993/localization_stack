@@ -26,7 +26,7 @@ public:
     virtual Points getPointCloud() const = 0;
     virtual Points getMissing() const = 0;
     virtual Points getReturn() const = 0;
-    virtual void transform(const transform::Rigid3f& tf);
+    virtual void transform(const transform::Rigid3f& tf) = 0;
 };
 }}
 

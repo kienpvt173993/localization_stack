@@ -8,6 +8,7 @@ find_package(ament_cmake REQUIRED)
 
 set(execute_node localization_node)
 set(library_name ${execute_node}_package)
+set(CMAKE_VERBOSE_MAKEFILE ON)
 
 set(dependencies 
   geometry_msgs
@@ -26,7 +27,6 @@ include_directories(include)
   add_library(${library_name} SHARED
   src/grid/grid_2d.cpp
   src/sensor/point_cloud_2d.cpp
-
 )
 
 target_include_directories(${library_name} PUBLIC ${Eigen3_INCLUDE_DIRS})

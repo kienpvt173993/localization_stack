@@ -10,6 +10,8 @@ Point convertToPoint(const float& range, const float& angle){
         0.f});
 }
 
+PointCloud2D::PointCloud2D() : intensity_(), origin_data_(), return_data_(), miss_data_() {}
+
 PointCloud2D::PointCloud2D(const sensor_msgs::msg::LaserScan& sensor,
     const transform::Rigid3f& origin){
     if (sensor.intensities.size() != sensor.ranges.size()){

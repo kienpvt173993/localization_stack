@@ -26,9 +26,9 @@ Grid2D::~Grid2D(){
     probability_grid_.clear();
 }
 
-void Grid2D::setProbabilityGrid(const Eigen::Array3i & cell, 
+void Grid2D::setProbability(const Eigen::Array3i & cell, 
     const float & p){
-    if (utils::inRosMap2D(meta_data_, cell)){
+    if (this->inLimit(cell)){
         auto new_p = (p < 0.1f) ? 0.1f : (0.9f < p) ? 0.9f : p;
         auto ind = utils::getValueIndex(meta_data_, cell);
         auto ros_cell = current_[ind];
@@ -48,14 +48,18 @@ void Grid2D::setProbabilityGrid(const Eigen::Array3i & cell,
     }
 }
 
-float Grid2D::getProbabilityGrid(const Eigen::Array3i & cell) const {
-    if(utils::inRosMap2D(meta_data_, cell)){
+float Grid2D::getProbability(const Eigen::Array3i & cell) const {
+    if(this->inLimit(cell)){
         auto ind = utils::getValueIndex(meta_data_, cell);
         return probability_grid_[ind];
     }
     else{
         return 0.1f;
     }
+}
+
+bool Grid2D::inLimit(const Eigen::Array3i & cell) const{
+    return utils::inRosMap2D(meta_data_, cell);
 }
 
 OccupancyGrid* Grid2D::getRosMap() const {
@@ -73,7 +77,7 @@ Eigen::Array3i Grid2D::getCellIndex(const sensor::Point& point) const {
     };
 }
 
-Rigid3f Grid2D::getPosition(const Rigid3f & pose) const {
+Rigid3f Grid2D::getPositionInImage(const Rigid3f & pose) const {
     Rigid3d origin({meta_data_.origin.position.x,
             meta_data_.origin.position.y, 
             meta_data_.origin.position.z},
@@ -81,7 +85,7 @@ Rigid3f Grid2D::getPosition(const Rigid3f & pose) const {
             meta_data_.origin.orientation.x,
             meta_data_.origin.orientation.y,
             meta_data_.origin.orientation.z});
-    return pose*origin.cast<float>();
+    return pose*origin.inverse().cast<float>();
 }
 
 }

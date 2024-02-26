@@ -21,6 +21,8 @@ public:
     PointCloud2D(const sensor_msgs::msg::LaserScan& sensor,
         const transform::Rigid3f& origin, const float& min, const float& max);
 
+    PointCloud2D(const sensor_msgs::msg::LaserScan& sensor);
+
     PointCloudType getPointCloudType() const override final{
         return PointCloudType::PointCloud2D;
     };
@@ -28,6 +30,7 @@ public:
     ~PointCloud2D() override;
     void clear() override final;
     bool empty() const override final;
+    size_t size() const override final;
     void pushBack(Point point ,float intensity) override;
     void pushBack(geometry_msgs::msg::Point32, float intensity) override;
     sensor_msgs::msg::PointCloud getRosPointCloud() const override final;

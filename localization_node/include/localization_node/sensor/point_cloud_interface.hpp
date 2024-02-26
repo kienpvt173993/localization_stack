@@ -20,6 +20,7 @@ public:
     virtual PointCloudType getPointCloudType() const = 0;
     virtual void clear() = 0;
     virtual bool empty() const = 0;
+    virtual size_t size() const = 0;
     virtual void pushBack(Point point ,float intensity) = 0;
     virtual void pushBack(geometry_msgs::msg::Point32, float intensity) = 0;
     virtual sensor_msgs::msg::PointCloud getRosPointCloud() const = 0;

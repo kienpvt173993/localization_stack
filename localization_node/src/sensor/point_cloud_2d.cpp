@@ -36,6 +36,22 @@ PointCloud2D::PointCloud2D(const Points& points){
     intensity_.resize(return_data_.size(), 0.f);
 }
 
+PointCloud2D::PointCloud2D(const sensor_msgs::msg::LaserScan& sensor){
+    if (sensor.intensities.size() != sensor.ranges.size()){
+        intensity_.resize(sensor.ranges.size(), 0.f);
+    }
+    else{
+        intensity_ = sensor.intensities;
+    }
+    for(size_t i = 0; i < sensor.ranges.size(); i++){
+        float angle = sensor.angle_increment*i + sensor.angle_min;
+        float range = sensor.ranges[i];
+        auto point = convertToPoint(range, angle);
+        origin_data_.push_back(point);
+        return_data_.push_back(point);
+    }
+}
+
 PointCloud2D::PointCloud2D(const sensor_msgs::msg::LaserScan& sensor,
     const transform::Rigid3f& origin, const float& min, const float& max){
     if (sensor.intensities.size() != sensor.ranges.size()){
@@ -72,6 +88,10 @@ void PointCloud2D::clear(){
 
 bool PointCloud2D::empty() const{
     return origin_data_.empty();
+}
+
+size_t PointCloud2D::size() const{
+    return origin_data_.size();
 }
 
 void PointCloud2D::pushBack(Point point ,float intensity){

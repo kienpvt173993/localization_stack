@@ -102,9 +102,21 @@ TEST(Grid2DTest, limit){
 
 TEST(Grid2DTest, probability_limit){
     auto grid = createGrid2D();
-    grid.setProbability({-1,1,0}, 0.8);
+    grid.setProbability({-1,1,0}, 0.8f);
     auto value_1 = grid.getProbability({-1,1,0});
-    EXPECT_NEAR(value_1, 0.1, 0.01);
+    EXPECT_NEAR(value_1, 0.1f, 0.01f);
+
+    grid.setProbability({2,3,0}, 0.f);
+    auto value_2 = grid.getProbability({2,3,0});
+    EXPECT_NEAR(value_2, 0.1f, 0.01f);
+
+    grid.setProbability({2,1,0}, 1.f);
+    auto value_3 = grid.getProbability({2,1,0});
+    EXPECT_NEAR(value_3, 0.9f, 0.01f);
+
+    grid.setProbability({1,1,0}, 0.8f);
+    auto value_4 = grid.getProbability({1,1,0});
+    EXPECT_NEAR(value_4, 0.8f, 0.01f);
 }
 
 }

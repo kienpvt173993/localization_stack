@@ -2,24 +2,41 @@
  #include <pcl/io/pcd_io.h>
  #include <pcl/point_types.h>
  #include <pcl/filters/voxel_grid.h>
+#include "glog/logging.h"
 
-
+namespace localization_node{
+namespace sensor{
 Points voxelFilter(const Points* points, const float resolution){
+    CHECK_GT(resolution, 0.);
+
+    pcl::PointCloud<pcl::PointXYZ>::Ptr cloudXYZ (new pcl::PointCloud<pcl::PointXYZ>);
+    for(const  auto count : points){
+        pcl::PointXYZ point;
+        point.x = count->x;
+        point.y = count->y;
+        point.z = count->z;
+        cloudXYZ->push_back(point);
+    }
+
+    pcl::PCLPointCloud2::Ptr cloud (new pcl::PCLPointCloud2());
     pcl::PCLPointCloud2::Ptr cloud_filtered (new pcl::PCLPointCloud2());
 
-    std::cerr << points->width * points->height << " data points " 
-        <<pcl::getFieldsList (*points) << std::endl;
+    pcl::toPCLPointCloud2(cloudXYZ,cloud);
     
     pcl::VoxelGrid<pcl::PCLPointCloud2> convert;
-    convert.setInputcloud(points);
+    convert.setInputCloud(cloud);
     convert.setLeafSize(resolution,resolution,resolution);
     convert.filter(*cloud_filtered);
-    std::cerr << cloud_filtered->height *cloud_filtered->height << " data poit"
-        << pcl::getFiedsList (*cloud_filtered) << std::endl:
-    
-    Points result;
-    for (const auto& count : cloud_filtered){
-        result.push_back(count);
+
+    pcl::PointCloud<pcl::PointXYZ>::Ptr cloudXYZ_result (new pcl::PointCloud<pcl::PointXYZ>);
+    sensor::Points point_result;
+    pcl::fromPCLPointCloud2(cloud_filtered,point_result);
+
+    localization_node::sensor::Points points_result;
+    for (const auto& count : point_result){
+        points_result.push_back(count);
     }
-    return *result;
+    return points_result;
+}
+}
 }

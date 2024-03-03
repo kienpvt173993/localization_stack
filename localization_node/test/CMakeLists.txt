@@ -1,4 +1,5 @@
 set(TEST_NAMES
+    voxel_filter
     point_cloud_2d
     grid_2d
     transform

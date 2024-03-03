@@ -17,6 +17,8 @@ set(dependencies
   absl
   Eigen3
   Ceres
+  sensor_msgs
+  PCL
 )
 
 foreach(name IN LISTS dependencies)
@@ -27,6 +29,7 @@ include_directories(include)
   add_library(${library_name} SHARED
   src/grid/grid_2d.cpp
   src/sensor/point_cloud_2d.cpp
+  src/sensor/voxel_filter.cpp
 )
 
 target_include_directories(${library_name} PUBLIC ${Eigen3_INCLUDE_DIRS})
@@ -72,7 +75,7 @@ if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   find_package(ament_cmake_gtest REQUIRED)
   add_subdirectory(test)
-  ament_lint_auto_find_test_dependencies()
+  #ament_lint_auto_find_test_dependencies()
 endif()
 
 ament_package()

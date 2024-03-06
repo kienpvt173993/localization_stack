@@ -21,6 +21,8 @@ set(dependencies
   PCL
 )
 
+find_package(PCL 1.12 REQUIRED)
+
 foreach(name IN LISTS dependencies)
   find_package(${name} REQUIRED)
 endforeach()
@@ -37,6 +39,10 @@ ament_target_dependencies(${library_name}
   ${dependencies}
   Eigen3
 )
+
+include_directories(${PCL_INCLUDE_DIRS})
+link_directories(${PCL_LIBRARY_DIRS})
+add_definitions(${PCL_DEFINITIONS})
 
 install(TARGETS ${library_name}
   ARCHIVE DESTINATION lib
@@ -56,6 +62,7 @@ install(DIRECTORY include/
 #         DESTINATION share/${PROJECT_NAME}/)
 
 target_link_libraries(${library_name}
+  ${PCL_LIBRARIES}
   ${CERES_LIBRARIES}
   absl::algorithm
   absl::base

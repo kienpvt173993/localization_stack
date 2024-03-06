@@ -12,9 +12,26 @@ sensor::VoxelFilterOptions createOptions(){
 
 TEST(VoxelFilterTest, returns_one_point_in_each_voxel){
     sensor::Points points;
-    points.push_back({0.05,0.07,0.1});
-    points.push_back({0.05,0.07,0.2});
-    sensor::voxelFilter(&points, 0.05);
+    points.push_back({0.07,0.07,0.21});
+    points.push_back({0.07,0.07,0.22});
+    points.push_back({0.07,0.07,0.23});
+    points.push_back({0.07,0.07,0.24});
+    points.push_back({0.07,0.07,0.25});
+    points.push_back({0.04,0.05,0.23});
+    points.push_back({0.04,0.05,0.34});
+    points.push_back({0.04,0.05,0.45});
+    points.push_back({0.04,0.05,0.43});
+    points.push_back({0.04,0.05,0.50});
+    points.push_back({0.04,0.05,0.12});
+    points.push_back({0.04,0.05,0.36});
+    points.push_back({0.04,0.05,0.30});
+    points.push_back({0.04,0.05,0.23});
+    points.push_back({0.04,0.05,0.42});
+    points.push_back({0.04,0.05,0.48});
+    points.push_back({0.04,0.05,0.41});
+
+    auto result = sensor::voxelFilter(&points, 0.05);
+    EXPECT_EQ(result.size(),1 );
 }
 
 // TEST(VoxelFilterTest, handles_large_coordinates){

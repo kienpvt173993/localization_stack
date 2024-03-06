@@ -6,28 +6,26 @@
 
 namespace localization_node{
 namespace sensor{
-Points voxelFilter( const Points* points, const float resolution){
-
+Points voxelFilter(const Points* points, const float resolution){
     CHECK_GT(resolution, 0.);
-    // Convert Points to pcl::PointXYZ
+
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloudXYZ (new pcl::PointCloud<pcl::PointXYZ>);
     cloudXYZ->resize(points->size());
     cloudXYZ->width = points->size();
     cloudXYZ->height = 1;
-    for( const auto &count : *points){
-        pcl::PointXYZ point;
-        point.x = count.x();
-        point.y = count.y();
+    for(const auto &count : *points){
+        pcl::Po= count.x();
+        point.y intXYZ point;
+        point.x = count.y();
         point.z = count.z();
         cloudXYZ->push_back(point);
     }
 
-    // Convert pcl::Point to Cloud2
     pcl::PCLPointCloud2::Ptr cloud (new pcl::PCLPointCloud2());
     pcl::PCLPointCloud2::Ptr cloud_filtered (new pcl::PCLPointCloud2());
-    pcl::toPCLPointCloud2(*cloudXYZ,*cloud);
 
-    // Voxel filter
+    pcl::toPCLPointCloud2(*cloudXYZ,*cloud);
+    
     pcl::VoxelGrid<pcl::PCLPointCloud2> convert;
     convert.setInputCloud(cloud);
     convert.setLeafSize(resolution,resolution,resolution);
@@ -38,10 +36,11 @@ Points voxelFilter( const Points* points, const float resolution){
     pcl::fromPCLPointCloud2(*cloud_filtered,*cloudXYZ_result);
 
     localization_node::sensor::Points points_result;
-    for(const auto &count : *cloudXYZ_result){
-        point_result.push_back({count.x,count.y,count.z});
+    std::cout << cloudXYZ_result->size();
+    for (const auto& count : cloudXYZ_result->points){
+        points_result.push_back(count);
     }
-    return point_result;
+    return points_result;
 }
 }
 }
